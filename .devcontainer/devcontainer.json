@@ -1,0 +1,39 @@
+{
+    "name": "kube-app-manager",
+    "image": "mcr.microsoft.com/devcontainers/go:1.26-trixie",
+    "runArgs": [
+        "--network=host",
+    ],
+    "mounts": [
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/vscode/.ssh-copy,type=bind,readonly",
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.gitconfig,target=/home/vscode/.gitconfig-copy,type=bind,readonly",
+        "source=${localEnv:HOME}${localEnv:USERPROFILE}/.kube/config-kovkotop,target=/home/vscode/.kube/config,type=bind,readonly"
+    ],
+    "features": {
+        "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+            "moby": false,
+            "dockerCompose": false
+        },
+        "ghcr.io/devcontainers-extra/features/go-task:1": {},
+        "ghcr.io/devcontainers-extra/features/uv:1": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "golang.go",
+                "ms-azuretools.vscode-docker",
+                "redhat.vscode-yaml",
+                "task.vscode-task",
+                "Tim-Koehler.helm-intellisense"
+            ],
+            "settings": {
+                "go.toolsManagement.autoUpdate": true
+            }
+        }
+    },
+    "postCreateCommand": {
+        "moveSsh": "mkdir -p /home/vscode/.ssh; cp /home/vscode/.ssh-copy/* /home/vscode/.ssh/ 2>/dev/null || true; chmod 600 /home/vscode/.ssh/* 2>/dev/null || true",
+        "gitconfigPermission": "cp /home/vscode/.gitconfig-copy /home/vscode/.gitconfig 2>/dev/null || true; chown vscode:vscode /home/vscode/.gitconfig 2>/dev/null || true"
+    },
+    "remoteUser": "vscode"
+}

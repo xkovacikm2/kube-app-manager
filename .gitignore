@@ -1,0 +1,18 @@
+# Binaries and build output
+.bin/
+*.exe
+
+# Test results
+.test-results/
+
+# Environment
+.env
+
+# Go
+vendor/
+
+# Index files
+.mcp-index/
+.serena/
+
+kovkotop-values.yaml

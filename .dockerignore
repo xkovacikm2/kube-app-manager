@@ -1,0 +1,9 @@
+.git
+.gitignore
+.vscode
+.devcontainer
+.github
+charts
+.test-results
+.bin
+*.md

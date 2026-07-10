@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Start (scida-email)",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/kube-app-manager",
+            "output": "${workspaceFolder}/.build/__debug_bin"
+        }
+    ]
+}

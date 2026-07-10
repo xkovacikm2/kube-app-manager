@@ -1,0 +1,60 @@
+version: "3"
+
+vars:
+  DOCKER_REPOSITORY: rck8sweucommon1.azurecr.io
+  DOCKER_IMAGE: data-science/kube-app-manager
+  DOCKER_TAG: '{{.DOCKER_TAG | default "local"}}'
+  MIN_COVERAGE: 75
+  TESTRESULTS_DIR: .test-results
+  CONTAINER_TOOL: '{{.CONTAINER_TOOL | default "docker"}}'
+  DOCKER_BUILD_FLAGS: '{{.DOCKER_BUILD_FLAGS | default ""}}'
+  OUTDIR: .bin
+
+tasks:
+  build:
+    desc: Build the service binary
+    cmds:
+      - mkdir -p {{.OUTDIR}}
+      - go build -o {{.OUTDIR}}/kube-app-manager ./cmd/kube-app-manager
+
+  start:
+    desc: Start the service
+    cmds:
+      - cmd: echo "Starting kube-app-manager..."
+        silent: true
+      - set -a && . ./.env && set +a && go run ./cmd/kube-app-manager/
+
+  test:
+    desc: Run all tests
+    cmds:
+      - mkdir -p {{.TESTRESULTS_DIR}}
+      - go test ./... -coverprofile={{.TESTRESULTS_DIR}}/coverage.out | tee {{.TESTRESULTS_DIR}}/test.out
+
+  test-coverage:
+    desc: Check coverage threshold
+    deps: [test]
+    cmds:
+      - go tool cover -func={{.TESTRESULTS_DIR}}/coverage.out
+
+  docker-build:
+    desc: Build Docker image
+    cmds:
+      - >-
+        {{.CONTAINER_TOOL}} build
+        -t {{.DOCKER_REPOSITORY}}/{{.DOCKER_IMAGE}}:{{.DOCKER_TAG}}
+        --secret id=SCIDA_DEVOPS_PAT
+        {{.DOCKER_BUILD_FLAGS}}
+        -f build/docker/Dockerfile .
+
+  lint:
+    desc: Run golangci-lint
+    cmds:
+      - golangci-lint run ./...
+
+  upgrade:
+    desc: Upgrade all Go dependencies
+    cmds:
+      - go get -u ./...
+
+env:
+  GOTOOLCHAIN: auto

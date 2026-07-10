@@ -1,0 +1,18 @@
+{{- if .Values.ingressRoute.enabled }}
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "kube-app-manager.fullname" . }}-websecure
+  labels:
+    app.kubernetes.io/name: {{ include "kube-app-manager.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  entryPoints:
+    - {{ .Values.ingressRoute.websecureEntryPoint }}
+  routes:
+    - kind: Rule
+      match: Host(`{{ .Values.ingressRoute.host }}`) && PathPrefix(`/apps`)
+      services:
+        - name: {{ include "kube-app-manager.fullname" . }}
+          port: {{ .Values.service.port }}
+{{- end }}

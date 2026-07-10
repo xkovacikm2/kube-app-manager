@@ -1,0 +1,16 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "make": true,
+        "go": true,
+        "gofmt": true,
+        "set": true,
+        "pushd": true,
+        "popd": true
+    },
+    "chat.mcp.serverSampling": {
+        "kube-app-manager/.vscode/mcp.json: scida-library": {
+            "allowedDuringChat": true,
+            "allowedOutsideChat": true
+        }
+    }
+}

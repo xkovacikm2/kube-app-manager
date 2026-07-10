@@ -1,0 +1,37 @@
+replicaCount: 1
+
+image:
+  repository: hocikto19/kube-app-manager
+  tag: local
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  name: ""
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingressRoute:
+  enabled: true
+  host: apps.example.local
+  webEntryPoint: web
+  websecureEntryPoint: websecure
+
+podSecurityContext:
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+resources: {}
