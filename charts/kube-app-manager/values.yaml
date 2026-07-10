@@ -2,8 +2,8 @@ replicaCount: 1
 
 image:
   repository: hocikto19/kube-app-manager
-  tag: local
-  pullPolicy: IfNotPresent
+  tag: latest
+  pullPolicy: Always
 
 nameOverride: ""
 fullnameOverride: ""
