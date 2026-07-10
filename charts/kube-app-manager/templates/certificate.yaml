@@ -1,0 +1,26 @@
+{{- if and .Values.ingressRoute.enabled .Values.ingressRoute.tls.enabled .Values.certManager.enabled }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "kube-app-manager.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "kube-app-manager.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  secretName: {{ include "kube-app-manager.tlsSecretName" . }}
+  dnsNames:
+    - {{ .Values.ingressRoute.host | quote }}
+    {{- range .Values.certManager.additionalDnsNames }}
+    - {{ . | quote }}
+    {{- end }}
+  issuerRef:
+    name: {{ required "certManager.issuerRef.name is required when certManager.enabled=true" .Values.certManager.issuerRef.name }}
+    kind: {{ .Values.certManager.issuerRef.kind }}
+    group: {{ .Values.certManager.issuerRef.group }}
+  {{- if .Values.certManager.duration }}
+  duration: {{ .Values.certManager.duration }}
+  {{- end }}
+  {{- if .Values.certManager.renewBefore }}
+  renewBefore: {{ .Values.certManager.renewBefore }}
+  {{- end }}
+{{- end }}

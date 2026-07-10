@@ -9,6 +9,10 @@ metadata:
 spec:
   entryPoints:
     - {{ .Values.ingressRoute.websecureEntryPoint }}
+  {{- if .Values.ingressRoute.tls.enabled }}
+  tls:
+    secretName: {{ include "kube-app-manager.tlsSecretName" . }}
+  {{- end }}
   routes:
     - kind: Rule
       match: Host(`{{ .Values.ingressRoute.host }}`) && PathPrefix(`/apps`)

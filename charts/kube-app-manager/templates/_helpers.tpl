@@ -22,3 +22,11 @@
 {{- default "default" .Values.serviceAccount.name -}}
 {{- end -}}
 {{- end -}}
+
+{{- define "kube-app-manager.tlsSecretName" -}}
+{{- if .Values.ingressRoute.tls.secretName -}}
+{{- .Values.ingressRoute.tls.secretName -}}
+{{- else -}}
+{{- printf "%s-tls" (include "kube-app-manager.fullname" .) -}}
+{{- end -}}
+{{- end -}}

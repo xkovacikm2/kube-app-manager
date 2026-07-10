@@ -21,6 +21,19 @@ ingressRoute:
   host: apps.example.local
   webEntryPoint: web
   websecureEntryPoint: websecure
+  tls:
+    enabled: true
+    secretName: ""
+
+certManager:
+  enabled: false
+  issuerRef:
+    name: ""
+    kind: ClusterIssuer
+    group: cert-manager.io
+  additionalDnsNames: []
+  duration: ""
+  renewBefore: ""
 
 podSecurityContext:
   runAsNonRoot: true
